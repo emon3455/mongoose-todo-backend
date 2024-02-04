@@ -2,11 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const todoSchema = require("../schemas/todoSchema");
 const router = express.Router();
-
+const checkLogin = require("../middlewares/checkLogin");
 const Todo = new mongoose.model("Todo", todoSchema);
 
 // get all todos
-router.get("/", async (req, res) => {
+router.get("/", checkLogin, async (req, res) => {
   try {
     // const data = await Todo.find({status:req.query.status}).select({date:0}).limit(10)
     const data = await Todo.find();

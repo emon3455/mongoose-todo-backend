@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const userSchema = require("../schemas/userSchema");
 const router = express.Router();
@@ -47,8 +48,17 @@ router.post("/login", async (req, res) => {
       );
       if (isValidPassword) {
         // generate a token and send to the user
+
+        const token = jwt.sign(
+          { userName: user[0].userName, userId: user[0]._id },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" }
+        );
+
         res.status(200).json({
-          message: "User Created Successfully",
+          access_token: token,
+          message: "User LogedIn Successfully",
+          userInfo: user[0]
         });
       } else {
         res.status(500).json({
