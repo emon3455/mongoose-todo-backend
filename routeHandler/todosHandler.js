@@ -21,6 +21,56 @@ router.get("/", async (req, res) => {
   }
 });
 
+// --------by using instance method:---------
+
+// get all active todos by using instance methods
+router.get("/active", async (req, res) => {
+  try {
+    const todo = new Todo();
+    const data = await todo.findActive('active');
+    res.status(200).json({
+      message: "Success",
+      result: data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal Server Error..!!!",
+    });
+  }
+});
+
+// get all active todos by using static methods
+router.get("/inactive", async (req, res) => {
+  try {
+    const data = await Todo.findInActive('inactive');
+    res.status(200).json({
+      message: "Success",
+      result: data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal Server Error..!!!",
+    });
+  }
+});
+
+// get all todos by using title via query helpers
+router.get("/title", async (req, res) => {
+  try {
+    const data = await Todo.find().byTitle(req.query.title).exec();
+    res.status(200).json({
+      message: "Success",
+      result: data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal Server Error..!!!",
+    });
+  }
+});
+
+
+
 // get single todo  by id
 router.get("/:id", async (req, res) => {
   try {

@@ -33,14 +33,19 @@ DBConnection();
 const todoHandler = require("./routeHandler/todosHandler");
 app.use("/todo", todoHandler);
 
+// user routes
+const userHandler = require("./routeHandler/usersHandler");
+app.use("/user", userHandler);
+
 
 // basic error handeling
 function errorHandler(err, req, res, next) {
   if (res.headersSent) {
     return next(err);
   }
-  res.status(500).json({ error: err });
+  res.status(500).json({ error: "Internal Server Error...!!" });
 }
+app.use(errorHandler);
 
 app.listen(3000, () => {
   console.log("app listening at port 3000");
