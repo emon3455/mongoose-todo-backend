@@ -10,6 +10,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// ---handler---
+const todoHandler = require("./routeHandler/todosHandler");
+const userHandler = require("./routeHandler/usersHandler");
+
+
 // database connection
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.zyyhzcl.mongodb.net/todoDB?retryWrites=true&w=majority`;
 const options = {
@@ -30,11 +35,9 @@ DBConnection();
 // --------all routes---------
 
 // todos route
-const todoHandler = require("./routeHandler/todosHandler");
 app.use("/todo", todoHandler);
 
 // user routes
-const userHandler = require("./routeHandler/usersHandler");
 app.use("/user", userHandler);
 
 
