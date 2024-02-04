@@ -7,11 +7,34 @@ const Todo = new mongoose.model("Todo", todoSchema);
 
 // get all todos
 router.get("/", async (req, res) => {
-
+  try {
+    // const data = await Todo.find({status:req.query.status}).select({date:0}).limit(10)
+    const data = await Todo.find();
+    res.status(200).json({
+      message: "Success",
+      result: data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err,
+    });
+  }
 });
 
 // get single todo  by id
-router.get("/:id", async (req, res) => {});
+router.get("/:id", async (req, res) => {
+  try {
+    const data = await Todo.findOne({_id:req.params.id});
+    res.status(200).json({
+      message: "Success",
+      result: data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err,
+    });
+  }
+});
 
 // post a todos
 router.post("/", async (req, res) => {
@@ -21,7 +44,7 @@ router.post("/", async (req, res) => {
     res.status(200).json({
       message: "Todo Was Inserted Successfully",
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({
       error: "There was a Server Side Error",
     });
@@ -35,7 +58,7 @@ router.post("/all", async (req, res) => {
     res.status(200).json({
       message: "Todos Were Inserted Successfully",
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({
       error: "There was a Server Side Error",
     });
@@ -43,9 +66,51 @@ router.post("/all", async (req, res) => {
 });
 
 // delete a todos
-router.delete("/", async (req, res) => {});
+router.delete("/:id", async (req, res) => {
+  try {
+    await Todo.deleteOne({_id: req.params.id});
+    res.status(200).json({
+      message: "Todos Was Deleted Successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "There was a Server Side Error",
+      error: err
+    });
+  }
+});
 
-// update a todos
-router.put("/", async (req, res) => {});
+// -------update a todos
+router.put("/:id", async (req, res) => {
+  try {
+    const response = await Todo.findByIdAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true }
+    );
+    res.status(200).json({
+      message: "Todos Was Updatedd Successfully",
+      result: response,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err,
+      message: "There was a Server Side Error",
+    });
+  }
+});
+// router.put("/:id", async (req, res) => {
+//   try {
+//     await Todo.updateOne({ _id: req.params.id },{$set:req.body});
+//     res.status(200).json({
+//       message: "Todos Was Updatedd Successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       error: "There was a Server Side Error",
+//     });
+//   }
+// });
+
 
 module.exports = router;

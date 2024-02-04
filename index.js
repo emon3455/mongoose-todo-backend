@@ -28,13 +28,11 @@ const DBConnection = module.exports =()=>{
 DBConnection();
 
 // --------all routes---------
+
+// todos route
 const todoHandler = require("./routeHandler/todosHandler");
 app.use("/todo", todoHandler);
 
-
-app.get("/", async (req, res) => {
-  res.send("Todo App running....");
-});
 
 // basic error handeling
 function errorHandler(err, req, res, next) {
