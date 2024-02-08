@@ -8,6 +8,21 @@ const router = express.Router();
 
 const User = new mongoose.model("User", userSchema);
 
+//get all user:
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find().populate("todo");
+    res.status(200).json({
+      message: "Success",
+      result: users,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal Server Error..!",
+    });
+  }
+});
+
 // signup
 router.post("/signup", async (req, res) => {
   try {
